@@ -6,9 +6,9 @@
         <input id="file-picker" class="hidden" type="file" @change="processFile($event)">
         <label id="btn-choose-file" for="file-picker" class="button btn btn-primary btn-block"> Choose File </label>
         <div class="divider"/>
-        <button id="btn-upload" class="button btn btn-block" v-bind:class="{ 'btn-success': file !== undefined, 'btn-default': file === undefined }" @click="upload()">
+        <button id="btn-upload" class="button btn btn-block" v-bind:class="{ 'btn-success': file, 'btn-default': file }" @click="upload()">
           <div v-show="loading" v-bind:class="{ loading }"/>
-          {{ file !== undefined ? 'Upload' : 'You must Choose a File first' }}
+          {{ file ? 'Upload' : 'You must Choose a File first' }}
         </button>
         <div style="width: 100%" v-show="url.length">
           <div class="divider"/>
@@ -16,12 +16,16 @@
           <div class="divider-right"/>
           <input id="url-bar" ref="urlBar" type="text" :value="url" v-show="url.length">
         </div>
+        <div v-show="error.length" class="btn btn-block btn-error">
+          {{ error }}
+        </div>
       </div>
       <div class="progress-bar" v-show="loading">
         <div class="progress-bar-filled" v-bind:style="{ width: loadingPercent + '%' }"></div>
       </div>
       <hr>
-      <img class="preview" :src="preview">
+      <h3> {{ file ? file.name : 'no file selected' }} </h3>
+      <img v-show="file && file.type.match(/image\/.+/)" class="preview" :src="preview">
     </div>
   </div>
 </template>
@@ -34,7 +38,8 @@ export default {
       preview: '',
       url: '',
       loadingPercent: 0,
-      loading: false
+      loading: false,
+      error: ''
     }
   },
   methods: {
@@ -54,6 +59,11 @@ export default {
         if (res.status === 200) {
           this.url = res.body
           return
+        }
+        if (res.status >= 400 && res.status < 500) {
+          this.error = `i.nuuls.com returned status ${res.status}. Try another file`
+        } else {
+          this.error = 'i.nuuls.com is down, try again later'
         }
       })
       .catch(err => {
