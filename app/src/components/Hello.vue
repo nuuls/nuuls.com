@@ -7,7 +7,6 @@
     <features></features>
     <h4> Social Media </h4>
     <social></social>
-    <a href="/lul" class="btn btn-info">LUL</a>
   </div>
 </template>
 
@@ -42,7 +41,6 @@ window.onkeydown = function (ev) {
   if (letters.length > 3) {
     letters = letters.slice(1)
   }
-  console.log(letters)
   if (letters.join('') === 'nam') {
     nam.height = '500%'
     console.log('NaM')

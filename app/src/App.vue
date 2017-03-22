@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img src="https://i.imgur.com/xap40eS.png" class="center big-img">
+    <img src="https://i.imgur.com/xap40eS.png" @click="root()" class="center big-img">
     <router-view></router-view>
   </div>
 </template>
@@ -8,7 +8,10 @@
 <script>
 export default {
   name: 'app',
-  components: {
+  methods: {
+    root () {
+      this.$router.push('/')
+    }
   }
 }
 </script>

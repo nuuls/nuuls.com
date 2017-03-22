@@ -6,12 +6,12 @@ import router from './router'
 import 'hack/dist/dark-grey.css'
 import 'hack'
 import http from 'vue-resource'
-import Websocket from './plugins/websocket'
+// import Websocket from './plugins/websocket'
 
 Vue.use(http)
-Vue.use(new Websocket(), {
-  url: 'ws://localhost:7333'
-})
+// Vue.use(new Websocket(), {
+//   url: 'ws://localhost:7333'
+// })
 
 /* eslint-disable no-new */
 new Vue({

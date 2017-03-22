@@ -5,7 +5,7 @@ Vue.use(Router)
 
 import Hello from 'components/Hello'
 import Memes from 'components/Memes'
-import Lul from 'components/Lul'
+import Uploader from 'components/Uploader'
 
 export default new Router({
   mode: 'history',
@@ -22,9 +22,9 @@ export default new Router({
       component: Memes
     },
     {
-      path: '/lul',
-      name: 'lul',
-      component: Lul
+      path: '/i',
+      name: 'i',
+      component: Uploader
     }
   ]
 })
