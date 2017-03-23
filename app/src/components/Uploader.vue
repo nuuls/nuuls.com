@@ -1,6 +1,6 @@
 <template>
   <div style="width: 70%">
-    <div class="max-70" @dragover.prevent @drop="drop">
+    <div class="max-70">
       <h1> Upload Memes </h1>
       <div class="buttons btn-group grid">
         <input id="file-picker" class="hidden" type="file" @change="processFile($event)">
@@ -60,6 +60,10 @@ export default {
           this.url = res.body
           return
         }
+      }, res => {
+        console.log(res)
+        this.loading = false
+        this.loadingPercent = 0
         if (res.status >= 400 && res.status < 500) {
           this.error = `i.nuuls.com returned status ${res.status}. Try another file`
         } else {
@@ -74,7 +78,21 @@ export default {
       console.log(ev)
       this.loadingPercent = ev.loaded / ev.total * 100
     },
-    createFile (file) {
+    createFile (files) {
+      if (!files.length) return
+      console.log(files)
+      let file
+      for (let i = 0; i < files.length; i++) {
+        var item = files[i]
+        console.log(item)
+        if (item.name) {
+          file = item
+          break
+        }
+      }
+      if (!file) {
+        file = files[0]
+      }
       this.file = file
       let reader = new FileReader()
       reader.onloadend = () => {
@@ -83,16 +101,16 @@ export default {
       reader.readAsDataURL(this.file)
     },
     processFile (ev) {
-      this.createFile(ev.target.files[0])
+      this.createFile(ev.target.files)
     },
     paste (ev) {
       console.log(ev)
-      this.createFile(ev.clipboardData.files[0])
+      this.createFile(ev.clipboardData.files)
     },
     drop (ev) {
       ev.preventDefault()
       ev.stopPropagation()
-      this.createFile(ev.dataTransfer.files[0])
+      this.createFile(ev.dataTransfer.files)
     },
     dragOver (ev) {
       ev.preventDefault()
@@ -111,6 +129,8 @@ export default {
   },
   mounted () {
     document.onpaste = this.paste
+    document.ondragover = this.dragOver
+    document.ondrop = this.drop
   }
 }
 
